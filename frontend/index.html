@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fuzzy Dice Game</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="game-layout">
+  <div class="side-panel">
+    <div class="top-bar" style="flex-direction: column; align-items: flex-start;">
+      <div class="top-bar" style="display: flex; align-items: flex-start; justify-content: flex-start; gap: 25px;">
+        <div>
+          <h1>Fuzzy Dice Game</h1>
+          <p style="font-style: italic; color: #2F3A3D; margin: 0;">
+            “Fortuna fortes adiuvat” — Fortune favors the bold.
+          </p>
+          <hr style="width: 100%; border: 1px solid #B8B3AA; margin: 6px 0;">
+          <p style="margin: 5px 0 0; color: #2F3A3D; font-size: 15px;">
+            A dice game inspired by Yahtzee rules, with roguelite mechanics.<br>
+            <a href="https://leopicard.net" target="_blank" style="color: #2F3A3D; text-decoration: none; font-weight: bold;">
+              <u>Léo Picard</u>
+            </a> (2026)
+          </p>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 5px;">
+          <button id="newGameButton">New game</button>
+          <button id="rulesButton">How to play</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="status-bar">
+      <span id="playerNameDisplay" class="player-label"></span>
+      <div id="goalText">Goal: 200 points</div>
+      <span id="roundText" class="round-label"></span>
+      <button id="debugButton">Debug win</button>
+    </div>
+
+    <div id="gameOverMessage"></div>
+
+    <div id="collectBox">
+      <div id="collectRow">
+        <button id="collectCoinsButton" disabled>Collect coins</button>
+        <span id="coinBalance">Current balance: 0🪙</span>
+      </div>
+      <p id="coinInfo" style="color: #2F3A3D; font-size: 14px; margin: 8px 0 0; text-align: left;">
+        You earn +2🪙 each time you win a game, and +1🪙 per 5 points above the current goal.
+      </p>
+    </div>
+
+    <div id="shopBlock">
+      <h4 id="shopTitle">Bonus shop</h4>
+      <div id="shopButtons"></div>
+    </div>
+
+    <div id="bonusStatsBlock">
+      <div id="bonusRow">
+        <div id="rollCounter">Extra rolls: 0</div>
+        <button id="activateRollButton" disabled>Activate roll</button>
+        <div id="bonusBox">
+          Current bonuses:<br>
+          <img class="die-small" src="dice_1.png"> +0 | <img class="die-small" src="dice_2.png"> +0 | <img class="die-small" src="dice_3.png"> +0 | <img class="die-small" src="dice_4.png"> +0 | <img class="die-small" src="dice_5.png"> +0 | <img class="die-small" src="dice_6.png"> +0
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="main-game">
+    <div class="dice-container" id="diceContainer">
+      <img class="die" id="die0" src="before_throw.png">
+      <img class="die" id="die1" src="before_throw.png">
+      <img class="die" id="die2" src="before_throw.png">
+      <img class="die" id="die3" src="before_throw.png">
+      <img class="die" id="die4" src="before_throw.png">
+      <button id="showAllDiceButton">Show all dice faces</button>
+    </div>
+
+    <div id="allDiceFacesContainer" class="hidden">
+
+      <div class="dieFaces" id="dieFaces0">
+        <div class="all-die-wrapper">
+          <img class="all-die" id="die0-face1" src="dice_1.png">
+          <img class="all-die" id="die0-face2" src="dice_2.png">
+          <img class="all-die" id="die0-face3" src="dice_3.png">
+          <img class="all-die" id="die0-face4" src="dice_4.png">
+          <img class="all-die" id="die0-face5" src="dice_5.png">
+          <img class="all-die" id="die0-face6" src="dice_6.png">
+        </div>
+      </div>
+
+      <div class="dieFaces" id="dieFaces1">
+        <div class="all-die-wrapper">
+          <img class="all-die" id="die1-face1" src="dice_1.png">
+          <img class="all-die" id="die1-face2" src="dice_2.png">
+          <img class="all-die" id="die1-face3" src="dice_3.png">
+          <img class="all-die" id="die1-face4" src="dice_4.png">
+          <img class="all-die" id="die1-face5" src="dice_5.png">
+          <img class="all-die" id="die1-face6" src="dice_6.png">
+        </div>
+      </div>
+
+      <div class="dieFaces" id="dieFaces2">
+        <div class="all-die-wrapper">
+          <img class="all-die" id="die2-face1" src="dice_1.png">
+          <img class="all-die" id="die2-face2" src="dice_2.png">
+          <img class="all-die" id="die2-face3" src="dice_3.png">
+          <img class="all-die" id="die2-face4" src="dice_4.png">
+          <img class="all-die" id="die2-face5" src="dice_5.png">
+          <img class="all-die" id="die2-face6" src="dice_6.png">
+        </div>
+      </div>
+
+      <div class="dieFaces" id="dieFaces3">
+        <div class="all-die-wrapper">
+          <img class="all-die" id="die3-face1" src="dice_1.png">
+          <img class="all-die" id="die3-face2" src="dice_2.png">
+          <img class="all-die" id="die3-face3" src="dice_3.png">
+          <img class="all-die" id="die3-face4" src="dice_4.png">
+          <img class="all-die" id="die3-face5" src="dice_5.png">
+          <img class="all-die" id="die3-face6" src="dice_6.png">
+        </div>
+      </div>
+
+      <div class="dieFaces" id="dieFaces4">
+        <div class="all-die-wrapper">
+          <img class="all-die" id="die4-face1" src="dice_1.png">
+          <img class="all-die" id="die4-face2" src="dice_2.png">
+          <img class="all-die" id="die4-face3" src="dice_3.png">
+          <img class="all-die" id="die4-face4" src="dice_4.png">
+          <img class="all-die" id="die4-face5" src="dice_5.png">
+          <img class="all-die" id="die4-face6" src="dice_6.png">
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <button id="rollButton">Roll dice</button>
+      <button id="confirmButton" disabled>Confirm choice</button>
+      <p id="rolls-left">Rolls left: 3</p>
+    </div>
+
+    <div class="scorecard">
+      <div class="column" id="upperSection">
+        <h3>Upper section</h3>
+        <div class="score-row-wrapper">
+          <div class="score-row" data-category="ones">Sum of ones</div>
+          <div class="score-value" id="value-ones"></div>
+        </div>
+        <div class="score-row-wrapper">
+          <div class="score-row" data-category="twos">Sum of twos</div>
+          <div class="score-value" id="value-twos"></div>
+        </div>
+        <div class="score-row-wrapper">
+          <div class="score-row" data-category="threes">Sum of threes</div>
+          <div class="score-value" id="value-threes"></div>
+        </div>
+        <div class="score-row-wrapper">
+          <div class="score-row" data-category="fours">Sum of fours</div>
+          <div class="score-value" id="value-fours"></div>
+        </div>
+        <div class="score-row-wrapper">
+          <div class="score-row" data-category="fives">Sum of fives</div>
+          <div class="score-value" id="value-fives"></div>
+        </div>
+        <div class="score-row-wrapper">
+          <div class="score-row" data-category="sixes">Sum of sixes</div>
+          <div class="score-value" id="value-sixes"></div>
+        </div>
+        <p id="upperInfo">Earn 35 bonus points for every <span id="bonusThresholdDisplay">63</span> points scored above</p>
+        <p id="upperBonus">Bonus: 0</p>
+        <hr style="width:100%; border:1px solid #B8B3AA; margin:10px 0;">
+        <p id="upperScoreDisplay" style="margin-top: 10px;">Upper score: 0</p>
+      </div>
+
+      <div class="column" id="lowerSection">
+        <h3>Lower section</h3>
+        <div class="score-row-wrapper">
+          <div class="score-row" data-category="threeKind">Three of a kind</div>
+          <div class="score-value" id="value-threeKind"></div>
+        </div>
+        <div class="score-row-wrapper">
+          <div class="score-row" data-category="fourKind">Four of a kind</div>
+          <div class="score-value" id="value-fourKind"></div>
+        </div>
+        <div class="score-row-wrapper">
+          <div class="score-row" data-category="fullHouse">Full house</div>
+          <div class="score-value" id="value-fullHouse"></div>
+        </div>
+        <div class="score-row-wrapper">
+          <div class="score-row" data-category="smallStraight">Small straight</div>
+          <div class="score-value" id="value-smallStraight"></div>
+        </div>
+        <div class="score-row-wrapper">
+          <div class="score-row" data-category="largeStraight">Large straight</div>
+          <div class="score-value" id="value-largeStraight"></div>
+        </div>
+        <div class="score-row-wrapper">
+          <div class="score-row" data-category="yahtzee">Yahtzee</div>
+          <div class="score-value" id="value-yahtzee"></div>
+        </div>
+        <div class="score-row-wrapper">
+          <div class="score-row" data-category="chance">Chance</div>
+          <div class="score-value" id="value-chance"></div>
+        </div>
+        <hr style="width:100%; border:1px solid #B8B3AA; margin:10px 0;">
+        <p id="lowerScoreDisplay">Lower score: 0</p>
+      </div>
+    </div>
+
+    <h3 id="totalScore">Total score: 0</h3>
+  </div>
+</div>
+
+<div class="privacy-footer">
+  version: 1.0
+  <button id="disclaimerLink" aria-haspopup="dialog" aria-controls="disclaimerModal">
+    disclaimer
+  </button>
+  <button id="privacyLink" aria-haspopup="dialog" aria-controls="privacyModal">
+    privacy notice
+  </button>
+</div>
+
+<div id="disclaimerModal" role="dialog" aria-modal="true" aria-labelledby="disclaimerTitle">
+  <div class="privacy-content">
+    <div class="privacy-header">
+      <h3 id="disclaimerTitle" class="privacy-title">Disclaimer</h3>
+      <button id="disclaimerClose" class="privacy-close" aria-label="Close disclaimer">Close</button>
+    </div>
+    <div class="privacy-body" id="disclaimerText">
+This is an independent, non-commercial fan project created for entertainment purposes only. It is inspired by the traditional dice game mechanics popularized by Yahtzee, a registered trademark of Hasbro, Inc, which my game is not affiliated with.
+
+The source code is available on my <a href=https://github.com/leops95/fuzzy-dice-game)" target="_blank" rel="noopener noreferrer" style="color: #2F3A3D; text-decoration: underline;">GitHub repository</a>. I welcome all suggestions!
+
+If you enjoyed my game, you'll certainly like <a href="https://store.steampowered.com/app/3430340/Dice_A_Million/" target="_blank" rel="noopener noreferrer" style="color: #2F3A3D; text-decoration: underline;">Dice A Million</a> and <a href="https://store.steampowered.com/app/2443590/Diecast/" target="_blank" rel="noopener noreferrer" style="color: #2F3A3D; text-decoration: underline;">Diecast</a>.
+    </div>
+  </div>
+</div>
+
+<div id="privacyModal" role="dialog" aria-modal="true" aria-labelledby="privacyTitle">
+  <div class="privacy-content">
+    <div class="privacy-header">
+      <h3 id="privacyTitle" class="privacy-title">Privacy notice</h3>
+      <button id="privacyClose" class="privacy-close" aria-label="Close privacy notice">Close</button>
+    </div>
+    <div class="privacy-body" id="privacyText">
+This game stores your player name and score data solely for the purpose of gameplay balancing. No cookies, tracking technologies, or additional personal information are collected. Your data is not shared with third parties and is stored securely on a European server. Data is retained for 1 month or until you request deletion.
+
+You have the right to access, correct, or delete your data at any time. To exercise these rights or for any privacy-related questions, please contact me on either platform mentioned on my personal website: <a href="https://leopicard.net" target="_blank" rel="noopener noreferrer" style="color: #2F3A3D; text-decoration: underline;">leopicard.net</a>.
+
+By using this game, you agree to this privacy notice.
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
