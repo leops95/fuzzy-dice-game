@@ -1,4 +1,4 @@
-This repository contains the source code for [Fuzzy Dice Game](https://fuzzy-dice-game.onrender.com), a static JavaScript website. The site is hosted on Render's free tier, which means it can take about 10 seconds to load.
+This repository contains the source code for [Fuzzy Dice Game](https://fuzzy-dice-game.onrender.com), a browser-based dice game with a Python/Flask backend. The site is hosted on Render's free tier, which means it can take about 10 seconds to load.
 
 I made this game to learn how to deploy containerized environments and how they interact with a backend database. But naturally, this is a fan-game, and I hope you enjoy it. It is possible to break the game if you're wise and lucky!
 
